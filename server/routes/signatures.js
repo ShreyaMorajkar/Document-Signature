@@ -1,0 +1,139 @@
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import { PDFDocument } from 'pdf-lib';
+import { v4 as uuidv4 } from 'uuid';
+import auth from '../middleware/auth.js';
+import Signature from '../models/Signature.js';
+import Document from '../models/Document.js';
+
+const router = express.Router();
+
+// 1. POST /api/signatures - Save signature position
+router.post('/', auth, async (req, res) => {
+  try {
+    const { documentId, fields } = req.body;
+    if (!documentId || !fields || fields.length === 0) {
+      return res.status(400).json({ message: 'Missing documentId or fields' });
+    }
+
+    const document = await Document.findOne({ _id: documentId, sender: req.user.id });
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
+    const signatureFields = fields.map((f) => ({
+      document: documentId,
+      page: f.page,
+      x: f.x,
+      y: f.y,
+      width: f.width,
+      height: f.height,
+      status: 'pending',
+    }));
+
+    await Signature.deleteMany({ document: documentId });
+    const savedFields = await Signature.insertMany(signatureFields);
+
+    res.status(201).json(savedFields);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 2. GET /api/signatures/:id - Get signatures for document
+router.get('/:id', async (req, res) => {
+  try {
+    const fields = await Signature.find({ document: req.params.id });
+    res.json(fields);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 3. POST /api/signatures/finalize - Embed signature into PDF
+router.post('/finalize', async (req, res) => {
+  try {
+    const { documentId, signatures } = req.body; // signatures: array of { fieldId, signatureImage }
+    if (!documentId || !signatures || signatures.length === 0) {
+      return res.status(400).json({ message: 'Missing documentId or signatures' });
+    }
+
+    const document = await Document.findById(documentId);
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
+    if (document.status === 'signed') {
+      return res.status(400).json({ message: 'Document is already signed' });
+    }
+
+    const originalPdfBytes = fs.readFileSync(document.originalPath);
+    const pdfDoc = await PDFDocument.load(originalPdfBytes);
+    const pages = pdfDoc.getPages();
+
+    for (const sig of signatures) {
+      const field = await Signature.findById(sig.fieldId);
+      if (!field || field.document.toString() !== document._id.toString()) {
+        continue;
+      }
+
+      const base64Data = sig.signatureImage.replace(/^data:image\/png;base64,/, "");
+      const imageBytes = Buffer.from(base64Data, 'base64');
+      const signatureImage = await pdfDoc.embedPng(imageBytes);
+
+      const page = pages[field.page];
+      if (!page) continue;
+
+      const { width: pageWidth, height: pageHeight } = page.getSize();
+      const absX = field.x * pageWidth;
+      const absY = (1 - field.y - field.height) * pageHeight;
+      const absW = field.width * pageWidth;
+      const absH = field.height * pageHeight;
+
+      page.drawImage(signatureImage, {
+        x: absX,
+        y: absY,
+        width: absW,
+        height: absH,
+      });
+
+      field.status = 'signed';
+      field.signatureImage = sig.signatureImage;
+      field.signedAt = new Date();
+      await field.save();
+    }
+
+    const signedPdfBytes = await pdfDoc.save();
+    const uploadsDir = path.join(process.cwd(), 'uploads');
+    const filename = `signed-${uuidv4()}.pdf`;
+    const signedPath = path.join(uploadsDir, filename);
+
+    fs.writeFileSync(signedPath, signedPdfBytes);
+
+    const signedHash = crypto.createHash('sha256').update(signedPdfBytes).digest('hex');
+
+    document.status = 'signed';
+    document.signedPath = signedPath;
+    document.signedHash = signedHash;
+    document.auditLog.push({
+      action: 'signed',
+      actor: document.recipientEmail || 'Recipient',
+      ip: req.ip || '127.0.0.1',
+      userAgent: req.headers['user-agent'],
+      details: `Recipient completed signing all fields. Signed document generated. SHA-256 Checksum: ${signedHash}`,
+    });
+
+    await document.save();
+
+    res.json({
+      message: 'Document signed successfully',
+      document,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+export default router;
