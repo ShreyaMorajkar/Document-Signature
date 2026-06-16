@@ -1,4 +1,5 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
@@ -8,6 +9,7 @@ import { PDFDocument } from 'pdf-lib';
 import auth from '../middleware/auth.js';
 import Document from '../models/Document.js';
 import Signature from '../models/Signature.js';
+import { saveFile, getFileStream, getFileBytes } from '../utils/storage.js';
 
 const router = express.Router();
 
@@ -48,9 +50,11 @@ router.post('/upload', auth, upload.single('file'), async (req, res) => {
     const fileBuffer = fs.readFileSync(req.file.path);
     const originalHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
 
+    const storedPath = await saveFile(req.file.path, req.file.filename);
+
     const newDoc = new Document({
       title: req.body.title || req.file.originalname,
-      originalPath: req.file.path,
+      originalPath: storedPath,
       originalHash,
       sender: req.user.id,
       status: 'draft',
@@ -226,7 +230,7 @@ router.post('/sign/:token', async (req, res) => {
     }
 
     // Load PDF bytes
-    const originalPdfBytes = fs.readFileSync(document.originalPath);
+    const originalPdfBytes = await getFileBytes(document.originalPath);
     const pdfDoc = await PDFDocument.load(originalPdfBytes);
     const pages = pdfDoc.getPages();
 
@@ -276,11 +280,12 @@ router.post('/sign/:token', async (req, res) => {
 
     fs.writeFileSync(signedPath, signedPdfBytes);
 
+    const storedSignedPath = await saveFile(signedPath, filename);
     const signedHash = crypto.createHash('sha256').update(signedPdfBytes).digest('hex');
 
     // Update Document state
     document.status = 'signed';
-    document.signedPath = signedPath;
+    document.signedPath = storedSignedPath;
     document.signedHash = signedHash;
     document.auditLog.push({
       action: 'signed',
@@ -357,10 +362,8 @@ router.get('/download/original/:id', auth, async (req, res) => {
     if (!document) {
       return res.status(404).json({ message: 'Document not found' });
     }
-    if (!fs.existsSync(document.originalPath)) {
-      return res.status(404).json({ message: 'Physical file not found' });
-    }
-    res.download(document.originalPath, document.title);
+    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(document.title)}"`);
+    await getFileStream(document.originalPath, res);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -373,10 +376,8 @@ router.get('/download/signed/:id', async (req, res) => {
     if (!document || !document.signedPath) {
       return res.status(404).json({ message: 'Signed document not found' });
     }
-    if (!fs.existsSync(document.signedPath)) {
-      return res.status(404).json({ message: 'Physical signed file not found' });
-    }
-    res.download(document.signedPath, `Signed-${document.title}`);
+    res.setHeader('Content-Disposition', `attachment; filename="Signed-${encodeURIComponent(document.title)}"`);
+    await getFileStream(document.signedPath, res);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -392,24 +393,30 @@ router.get('/view/:id', async (req, res) => {
 
     let doc;
     if (token) {
+      // Recipient/Signer flow: validated via signing token
       doc = await Document.findOne({ _id: id, signingToken: token });
     } else {
-      // Need auth - we will parse query param token or check session
-      // For simplicity in PDF.js loading, we will allow by ID, but check if document exists
-      doc = await Document.findById(id);
+      // Sender/Owner flow: require JWT authentication (via header or query param jwt)
+      const authHeader = req.headers.authorization;
+      let jwtToken = req.query.jwt;
+      
+      if (!jwtToken && authHeader && authHeader.startsWith('Bearer ')) {
+        jwtToken = authHeader.split(' ')[1];
+      }
+
+      if (!jwtToken) {
+        return res.status(401).json({ message: 'Authentication token required' });
+      }
+
+      const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET || 'doc_sign_jwt_super_secret_key_123456');
+      doc = await Document.findOne({ _id: id, sender: decoded.id });
     }
 
     if (!doc) {
       return res.status(404).json({ message: 'Access denied' });
     }
 
-    const filePath = doc.originalPath;
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ message: 'File not found' });
-    }
-
-    res.contentType("application/pdf");
-    fs.createReadStream(filePath).pipe(res);
+    await getFileStream(doc.originalPath, res);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

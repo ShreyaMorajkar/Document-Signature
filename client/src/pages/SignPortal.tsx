@@ -3,7 +3,7 @@ import {
   CheckSquare, Clock, ShieldCheck, AlertTriangle, FileSignature
 } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
-import api from '../utils/api';
+import api, { API_BASE_URL } from '../utils/api';
 import SignaturePad from '../components/SignaturePad';
 
 // Configure PDF.js Worker
@@ -78,7 +78,7 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
 
   const loadPDF = async (docId: string) => {
     try {
-      const url = `http://localhost:5000/api/docs/view/${docId}?token=${token}`;
+      const url = `${API_BASE_URL}/docs/view/${docId}?token=${token}`;
       const loadingTask = pdfjsLib.getDocument({ url });
       const pdf = await loadingTask.promise;
       setNumPages(pdf.numPages);
@@ -266,7 +266,7 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
           </div>
           <div className="flex space-x-2">
             <a
-              href={`http://localhost:5000/api/docs/download/signed/${docInfo.id}`}
+              href={`${API_BASE_URL}/docs/download/signed/${docInfo.id}`}
               className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all flex items-center"
             >
               Download PDF

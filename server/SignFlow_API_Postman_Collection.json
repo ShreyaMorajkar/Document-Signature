@@ -1,0 +1,543 @@
+{
+  "info": {
+    "_postman_id": "8ca3ceb1-doc-sign-app-api-collection",
+    "name": "SignFlow Document Signature API",
+    "description": "Comprehensive MERN API collection for user authentication, document lifecycle tracking, pdf-lib placements, and cryptographic audit ledgers.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice\",\n  \"email\": \"alice@example.com\",\n  \"password\": \"alicepassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.environment.set(\"authToken\", jsonData.token);",
+                  "    pm.environment.set(\"refreshToken\", jsonData.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"alicepassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Refresh Access Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.environment.set(\"authToken\", jsonData.token);",
+                  "    pm.environment.set(\"refreshToken\", jsonData.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "Upload Original PDF",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "title",
+                  "value": "Consulting Contract",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/docs/upload",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "docs",
+                "upload"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List User PDFs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/docs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "docs"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Specific Doc Info",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/docs/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "docs",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "65fc2a..."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Send Document & Create Fields",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentId\": \"<doc-id>\",\n  \"recipientName\": \"Bob Smith\",\n  \"recipientEmail\": \"bob@example.com\",\n  \"fields\": [\n    {\n      \"page\": 0,\n      \"x\": 0.25,\n      \"y\": 0.65,\n      \"width\": 0.20,\n      \"height\": 0.08\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/docs/send",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "docs",
+                "send"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Signatures & Public Portal",
+      "item": [
+        {
+          "name": "Get Fields by Recipient Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/docs/sign/:token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "docs",
+                "sign",
+                ":token"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "<recipient-signing-token-uuid>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Process Recipient Signature (Token Portal)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signatures\": [\n    {\n      \"fieldId\": \"<field-object-id>\",\n      \"signatureImage\": \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/docs/sign/:token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "docs",
+                "sign",
+                ":token"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "<recipient-signing-token-uuid>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Decline Document (Token Portal)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Pricing values do not align with original proposal terms.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/docs/decline/:token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "docs",
+                "decline",
+                ":token"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "<recipient-signing-token-uuid>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Save Coordinates (Legacy API)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentId\": \"<doc-id>\",\n  \"fields\": [\n    {\n      \"page\": 0,\n      \"x\": 0.25,\n      \"y\": 0.65,\n      \"width\": 0.20,\n      \"height\": 0.08\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/signatures",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "signatures"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Placed Fields (Legacy API)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/signatures/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "signatures",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<doc-id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Finalize PDF Placement (Legacy API)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentId\": \"<doc-id>\",\n  \"signatures\": [\n    {\n      \"fieldId\": \"<field-object-id>\",\n      \"signatureImage\": \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/signatures/finalize",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "signatures",
+                "finalize"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Verification & Audits",
+      "item": [
+        {
+          "name": "Get Doc Audit Trail (API Route)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audit/:docId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit",
+                ":docId"
+              ],
+              "variable": [
+                {
+                  "key": "docId",
+                  "value": "<doc-id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Verify Cryptographic Certificate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/docs/verify/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "docs",
+                "verify",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<doc-id>"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

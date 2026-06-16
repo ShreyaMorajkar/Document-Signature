@@ -3,7 +3,7 @@ import {
   ShieldCheck, ShieldAlert, ArrowLeft, Calendar, 
   MapPin, UserCheck, Smartphone, CheckCircle
 } from 'lucide-react';
-import api from '../utils/api';
+import api, { API_BASE_URL } from '../utils/api';
 
 interface AuditLog {
   _id: string;
@@ -126,7 +126,7 @@ const VerifyPage: React.FC<VerifyPageProps> = ({ documentId, setCurrentPage }) =
 
         {isSigned && doc.signedPath && (
           <a
-            href={`http://localhost:5000/api/docs/download/signed/${doc._id}`}
+            href={`${API_BASE_URL}/docs/download/signed/${doc._id}`}
             className="w-full md:w-auto text-center px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md shadow-emerald-500/20"
           >
             Download Certified Copy

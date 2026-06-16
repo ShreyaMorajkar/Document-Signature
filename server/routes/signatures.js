@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import auth from '../middleware/auth.js';
 import Signature from '../models/Signature.js';
 import Document from '../models/Document.js';
+import { saveFile, getFileBytes } from '../utils/storage.js';
 
 const router = express.Router();
 
@@ -69,7 +70,7 @@ router.post('/finalize', async (req, res) => {
       return res.status(400).json({ message: 'Document is already signed' });
     }
 
-    const originalPdfBytes = fs.readFileSync(document.originalPath);
+    const originalPdfBytes = await getFileBytes(document.originalPath);
     const pdfDoc = await PDFDocument.load(originalPdfBytes);
     const pages = pdfDoc.getPages();
 
@@ -112,10 +113,11 @@ router.post('/finalize', async (req, res) => {
 
     fs.writeFileSync(signedPath, signedPdfBytes);
 
+    const storedSignedPath = await saveFile(signedPath, filename);
     const signedHash = crypto.createHash('sha256').update(signedPdfBytes).digest('hex');
 
     document.status = 'signed';
-    document.signedPath = signedPath;
+    document.signedPath = storedSignedPath;
     document.signedHash = signedHash;
     document.auditLog.push({
       action: 'signed',

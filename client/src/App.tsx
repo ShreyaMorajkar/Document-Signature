@@ -36,6 +36,16 @@ const App: React.FC = () => {
     return () => window.removeEventListener('popstate', handleRouting);
   }, []);
 
+  // Listen for auth session timeouts and redirect to login
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      navigate('login');
+      alert('Your session has expired. Please sign in again.');
+    };
+    window.addEventListener('auth-expired', handleAuthExpired);
+    return () => window.removeEventListener('auth-expired', handleAuthExpired);
+  }, []);
+
   // Custom setter that updates history pushState to maintain correct browser URLs
   const navigate = (page: string, param?: string) => {
     let url = '/';

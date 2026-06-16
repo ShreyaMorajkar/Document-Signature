@@ -4,7 +4,7 @@ import {
   Trash2, Mail, Send, Sparkles, Move
 } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
-import api from '../utils/api';
+import api, { API_BASE_URL } from '../utils/api';
 
 // Configure PDF.js Worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@6.0.227/build/pdf.worker.min.mjs`;
@@ -95,7 +95,8 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
   const loadPDF = async (id: string) => {
     setLoading(true);
     try {
-      const url = `http://localhost:5000/api/docs/view/${id}`;
+      const jwtToken = localStorage.getItem('token');
+      const url = `${API_BASE_URL}/docs/view/${id}?jwt=${jwtToken}`;
       const loadingTask = pdfjsLib.getDocument({ url });
       const pdf = await loadingTask.promise;
       setNumPages(pdf.numPages);

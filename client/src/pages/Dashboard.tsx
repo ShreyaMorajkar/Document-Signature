@@ -3,7 +3,7 @@ import {
   FileText, Clock, CheckCircle, XCircle, FilePlus, Copy, Download, 
   ExternalLink, ListOrdered, Calendar, Mail, FileCheck, HelpCircle
 } from 'lucide-react';
-import api from '../utils/api';
+import api, { API_BASE_URL } from '../utils/api';
 
 interface AuditEntry {
   _id: string;
@@ -274,7 +274,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                       {doc.status === 'signed' && (
                         <>
                           <a
-                            href={`http://localhost:5000/api/docs/download/signed/${doc._id}`}
+                            href={`${API_BASE_URL}/docs/download/signed/${doc._id}`}
                             className="p-2 bg-emerald-500/10 hover:bg-emerald-500 border border-emerald-500/20 hover:border-emerald-500 text-emerald-400 hover:text-white rounded-lg transition-all cursor-pointer flex items-center"
                             title="Download Signed PDF"
                           >
