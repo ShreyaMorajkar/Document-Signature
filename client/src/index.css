@@ -9,52 +9,123 @@
 
 body {
   font-family: var(--font-sans);
-  background: radial-gradient(circle at top left, #1e1b4b 0%, #0f172a 40%, #020617 100%);
-  color: #f3f4f6;
+  background-color: #050508;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: #f9fafb;
   min-height: 100vh;
   margin: 0;
 }
 
-/* Custom utilities */
-.glass {
-  background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Stark Monochrome & Safety Orange Design System */
+.cyber-card {
+  background: #0d0d12;
+  border: 2px solid #1f1f2e;
+  box-shadow: 4px 4px 0px #12121a;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.glass-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.glass-hover:hover {
-  background: rgba(15, 23, 42, 0.75);
-  border-color: rgba(99, 102, 241, 0.35);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
-  transform: translateY(-2px);
+.cyber-card-active {
+  border-color: #ea580c !important;
+  box-shadow: 4px 4px 0px #7c2d12 !important;
 }
 
-.glow-purple {
-  box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+.cyber-card-hover {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.glow-indigo {
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+.cyber-card-hover:hover {
+  transform: translate(-3px, -3px);
+  border-color: #f97316;
+  box-shadow: 7px 7px 0px #ea580c;
+}
+
+.cyber-button-primary {
+  background: #f97316;
+  color: #000000;
+  border: 2px solid #ea580c;
+  box-shadow: 3px 3px 0px #000000;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyber-button-primary:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000000;
+  background: #fb923c;
+}
+
+.cyber-button-primary:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+.cyber-button-primary:disabled {
+  background: #4b5563;
+  color: #9ca3af;
+  border-color: #374151;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.cyber-button-secondary {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #1f1f2e;
+  box-shadow: 3px 3px 0px #111115;
+  font-weight: 600;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyber-button-secondary:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #ea580c;
+  border-color: #f97316;
+}
+
+.cyber-button-secondary:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #ea580c;
+}
+
+.cyber-input {
+  background: #050508;
+  border: 2px solid #1f1f2e;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  transition: all 0.2s ease;
+}
+
+.cyber-input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 3px 3px 0px #ea580c;
+  background: #0b0b0f;
 }
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #020617;
+  background: #050508;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 9999px;
+  background: #1f1f2e;
+  border: 2px solid #050508;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #f97316;
+}
+
+/* Monospace fonts for ledgers and status tags */
+.tech-font {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 /* Draggable placeholder transitions */

@@ -184,7 +184,7 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
 
   if (loading) {
     return (
-      <div className="text-center py-24 text-slate-400 text-sm animate-pulse">
+      <div className="text-center py-24 text-slate-400 text-xs font-bold uppercase tracking-wider tech-font animate-pulse">
         Loading document signing workspace...
       </div>
     );
@@ -192,10 +192,10 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
 
   if (!docInfo) {
     return (
-      <div className="max-w-md mx-auto my-16 glass p-8 border border-slate-800 rounded-2xl text-center">
-        <AlertTriangle size={48} className="mx-auto text-rose-500 mb-4" />
-        <h3 className="text-lg font-bold text-white mb-2">Invalid Access Link</h3>
-        <p className="text-sm text-slate-400">
+      <div className="max-w-md mx-auto my-16 cyber-card p-8 border-2 border-[#1f1f2e] rounded-xl text-center">
+        <AlertTriangle size={48} className="mx-auto text-[#f97316] mb-4" />
+        <h3 className="text-lg font-black text-white uppercase mb-2">Access Revoked</h3>
+        <p className="text-xs text-slate-400 uppercase font-semibold">
           This document signing link is invalid, expired, or the document has been removed by the owner.
         </p>
       </div>
@@ -208,13 +208,13 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
     <div className="space-y-8 px-4 pb-16 max-w-7xl mx-auto">
       
       {/* Header bar */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 pb-6 border-b border-slate-800/80">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 pb-6 border-b border-[#1f1f2e]">
         <div>
-          <h1 className="font-display text-2xl font-bold text-white mt-0 mb-1">
+          <h1 className="font-display text-2xl font-black text-white uppercase mt-0 mb-1">
             Review & Sign Document
           </h1>
-          <p className="text-xs text-slate-400">
-            Sender: <span className="text-indigo-400">{docInfo.recipientEmail}</span> • Document Name: <span className="text-white font-medium">{docInfo.title}</span>
+          <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">
+            Sender: <span className="text-[#f97316] tech-font">{docInfo.recipientEmail}</span> • Name: <span className="text-white font-black">{docInfo.title}</span>
           </p>
         </div>
 
@@ -223,14 +223,14 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setIsDeclineOpen(true)}
-              className="px-4 py-2 bg-slate-900 hover:bg-rose-950/20 border border-slate-850 hover:border-rose-900/50 text-rose-400 rounded-xl text-xs font-semibold transition-all cursor-pointer"
+              className="px-4 py-2.5 bg-black hover:bg-rose-950/20 border border-rose-500/35 hover:border-rose-500 text-rose-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
             >
               Decline to Sign
             </button>
             <button
               onClick={handleFinalize}
               disabled={signingProgress || !allFieldsSigned}
-              className="flex items-center space-x-1.5 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-700/30 text-white rounded-xl text-xs font-semibold shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all cursor-pointer"
+              className="flex items-center space-x-1.5 px-5 py-2.5 cyber-button-primary rounded-lg text-xs font-bold uppercase tracking-wider"
             >
               <CheckSquare size={14} />
               <span>{signingProgress ? 'Finalizing...' : 'Finalize & Sign'}</span>
@@ -241,12 +241,12 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
 
       {/* Decline Status Box */}
       {docInfo.status === 'declined' && (
-        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-start space-x-3 max-w-xl mx-auto">
+        <div className="p-4 bg-rose-500/10 border-2 border-rose-500/30 rounded-xl flex items-start space-x-3 max-w-xl mx-auto">
           <AlertTriangle size={20} className="text-rose-500 mt-0.5" />
           <div>
-            <h4 className="text-sm font-bold text-white">Document Declined</h4>
-            <p className="text-xs text-slate-400 mt-1">
-              You declined to sign this document. If this was a mistake, please contact the sender to send a new signature link.
+            <h4 className="text-sm font-bold text-white uppercase">Document Declined</h4>
+            <p className="text-xs text-slate-400 mt-1 uppercase font-semibold">
+              You declined to sign this document. If this was a mistake, please contact the sender to request a new signature link.
             </p>
           </div>
         </div>
@@ -254,12 +254,12 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
 
       {/* Signed Status Box */}
       {docInfo.status === 'signed' && (
-        <div className="p-5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-between max-w-xl mx-auto glow-indigo">
+        <div className="p-5 bg-emerald-500/10 border-2 border-emerald-500/30 rounded-xl flex items-center justify-between max-w-xl mx-auto">
           <div className="flex items-center space-x-3">
             <ShieldCheck size={28} className="text-emerald-400" />
             <div>
-              <h4 className="text-sm font-bold text-white">Document Signed Successfully</h4>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <h4 className="text-sm font-bold text-white uppercase">Document Signed Successfully</h4>
+              <p className="text-xs text-slate-400 mt-0.5 uppercase font-semibold">
                 The cryptographic audit log has been sealed and the signed PDF is generated.
               </p>
             </div>
@@ -267,15 +267,15 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
           <div className="flex space-x-2">
             <a
               href={`${API_BASE_URL}/docs/download/signed/${docInfo.id}`}
-              className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all flex items-center"
+              className="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black border border-emerald-600 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center"
             >
-              Download PDF
+              Download
             </a>
             <button
               onClick={() => setCurrentPage('verify')}
-              className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition-all cursor-pointer"
+              className="px-3.5 py-2 cyber-button-secondary rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
             >
-              Verify Certificate
+              Verify
             </button>
           </div>
         </div>
@@ -286,10 +286,10 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
         <div className="flex flex-col items-center py-2 overflow-x-auto space-y-8">
           
           {/* Fields instructions bar */}
-          <div className="bg-indigo-950/20 border border-indigo-900/30 px-6 py-3 rounded-2xl flex items-center space-x-2 text-xs text-indigo-400">
+          <div className="bg-[#f97316]/10 border border-[#ea580c]/30 px-6 py-3 rounded-lg flex items-center space-x-2 text-xs text-[#f97316] font-bold uppercase tracking-wider tech-font">
             <Clock size={14} className="animate-spin" />
             <span>
-              Please click on the highlighted boxes to place your signature. 
+              Click highlighted boxes to place your signature. 
               ({Object.keys(signaturesMap).length} of {fields.length} completed)
             </span>
           </div>
@@ -297,7 +297,7 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
           {Array.from({ length: numPages }).map((_, idx) => (
             <div
               key={idx}
-              className="relative bg-slate-900 rounded-xl shadow-2xl border border-slate-800/80 select-none"
+              className="relative bg-slate-950 rounded-lg shadow-2xl border-2 border-[#1f1f2e] select-none"
               style={{
                 width: pagesDim[idx]?.width || 'auto',
                 height: pagesDim[idx]?.height || 'auto'
@@ -306,7 +306,7 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
               {/* Render PDF Canvas */}
               <canvas
                 ref={(el) => { canvasRefs.current[idx] = el; }}
-                className="rounded-xl"
+                className="rounded-lg"
               />
 
               {/* Interaction Overlay */}
@@ -335,10 +335,10 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
                           width: `${w}px`,
                           height: `${h}px`,
                         }}
-                        className={`absolute flex flex-col justify-center items-center rounded-lg border-2 transition-all cursor-pointer z-10 pointer-events-auto overflow-hidden ${
+                        className={`absolute flex flex-col justify-center items-center rounded border-2 transition-all cursor-pointer z-10 pointer-events-auto overflow-hidden ${
                           sigImage
                             ? 'border-emerald-500/50 bg-white/5 shadow-inner'
-                            : 'border-dashed border-amber-500 bg-amber-500/10 hover:bg-amber-500/25 animate-pulse'
+                            : 'border-dashed border-[#f97316] bg-[#f97316]/10 hover:bg-[#f97316]/25 animate-pulse'
                         }`}
                       >
                         {sigImage ? (
@@ -348,7 +348,7 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
                             className="max-w-full max-h-full object-contain pointer-events-none"
                           />
                         ) : (
-                          <span className="text-[10px] font-bold text-amber-300 flex items-center space-x-1 uppercase tracking-wider select-none">
+                          <span className="text-[10px] font-bold text-[#f97316] flex items-center space-x-1 uppercase tracking-wider select-none tech-font">
                             <FileSignature size={10} />
                             <span>Sign Here</span>
                           </span>
@@ -359,7 +359,7 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
               </div>
 
               {/* Page indicator */}
-              <div className="absolute bottom-4 right-4 bg-slate-950/80 px-2 py-1 rounded text-[10px] text-slate-400 font-mono">
+              <div className="absolute bottom-4 right-4 bg-black border border-[#1f1f2e] px-2 py-1 rounded text-[10px] text-slate-400 font-mono">
                 Page {idx + 1} of {numPages}
               </div>
             </div>
@@ -379,10 +379,10 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
 
       {/* Decline Reason Modal */}
       {isDeclineOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-          <div className="glass w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 p-6 space-y-4">
-            <h3 className="font-display font-bold text-lg text-white">Decline signing this document?</h3>
-            <p className="text-xs text-slate-400">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+          <div className="cyber-card w-full max-w-md rounded-xl p-6 space-y-4">
+            <h3 className="font-display font-black text-lg text-white uppercase">Decline signing this document?</h3>
+            <p className="text-xs text-slate-400 uppercase font-semibold">
               Please state why you are declining to sign this agreement. The sender will receive this feedback.
             </p>
             
@@ -390,9 +390,9 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
               <textarea
                 value={declineReason}
                 onChange={(e) => setDeclineReason(e.target.value)}
-                placeholder="e.g. The payment terms do not match our original invoice discussions."
+                placeholder="e.g. The payment terms do not match our discussions."
                 rows={4}
-                className="w-full px-4 py-3 bg-slate-900/60 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 shadow-inner resize-none"
+                className="w-full px-4 py-3 cyber-input rounded-lg text-xs shadow-inner resize-none"
                 maxLength={250}
                 required
               />
@@ -404,14 +404,14 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
                     setIsDeclineOpen(false);
                     setDeclineReason('');
                   }}
-                  className="px-4 py-2 bg-slate-900 border border-slate-800 text-slate-400 hover:text-white rounded-lg text-xs cursor-pointer"
+                  className="px-4 py-2 bg-black border border-[#1f1f2e] text-slate-400 hover:text-white rounded-lg text-xs uppercase font-bold tracking-wider cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={signingProgress || !declineReason.trim()}
-                  className="px-4 py-2 bg-rose-600 hover:bg-rose-500 disabled:bg-rose-900/30 text-white rounded-lg text-xs font-semibold cursor-pointer"
+                  className="px-4 py-2 bg-rose-600 hover:bg-rose-500 border border-rose-700 text-white rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer"
                 >
                   Confirm Decline
                 </button>

@@ -86,13 +86,13 @@ const Dashboard: React.FC<DashboardProps> = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'draft':
-        return <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-800 text-slate-400 border border-slate-700/50">Draft</span>;
+        return <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-700 bg-slate-900/60 text-slate-400 tech-font">Draft</span>;
       case 'sent':
-        return <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Pending Signature</span>;
+        return <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border border-[#f97316]/35 bg-[#f97316]/10 text-[#f97316] tech-font">Pending</span>;
       case 'signed':
-        return <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Signed & Valid</span>;
+        return <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border border-emerald-500/35 bg-emerald-500/10 text-emerald-400 tech-font">Signed</span>;
       case 'declined':
-        return <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">Declined</span>;
+        return <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border border-rose-500/35 bg-rose-500/10 text-rose-400 tech-font">Declined</span>;
       default:
         return null;
     }
@@ -103,60 +103,60 @@ const Dashboard: React.FC<DashboardProps> = ({
       {/* Upper header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
         <div>
-          <h1 className="font-display text-3xl font-extrabold tracking-tight text-white mb-2 mt-0">
+          <h1 className="font-display text-3xl font-black tracking-tight text-white uppercase mt-0 mb-2">
             Document Center
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
             Upload, place signature boxes, send, and track signing history in real-time.
           </p>
         </div>
         <button
           onClick={() => setCurrentPage('builder')}
-          className="flex items-center justify-center space-x-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all cursor-pointer w-full md:w-auto self-start"
+          className="flex items-center justify-center space-x-2 py-3 px-5 cyber-button-primary rounded-lg text-xs font-bold uppercase tracking-wider w-full md:w-auto self-start"
         >
-          <FilePlus size={18} />
+          <FilePlus size={16} />
           <span>New Document</span>
         </button>
       </div>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="glass p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total</span>
-          <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-bold font-display text-white">{stats.total}</span>
-            <FileText size={16} className="text-indigo-400" />
+        <div className="cyber-card p-5 rounded-lg flex flex-col justify-between hover:border-slate-700">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-505">Total</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-3xl font-black font-display text-white">{stats.total}</span>
+            <FileText size={16} className="text-[#f97316]" />
           </div>
         </div>
         
-        <div className="glass p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Drafts</span>
-          <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-bold font-display text-slate-300">{stats.drafts}</span>
+        <div className="cyber-card p-5 rounded-lg flex flex-col justify-between hover:border-slate-700">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Drafts</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-3xl font-black font-display text-slate-400">{stats.drafts}</span>
             <FileText size={16} className="text-slate-500" />
           </div>
         </div>
 
-        <div className="glass p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Pending</span>
-          <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-bold font-display text-amber-400">{stats.sent}</span>
-            <Clock size={16} className="text-amber-400" />
+        <div className="cyber-card p-5 rounded-lg flex flex-col justify-between hover:border-slate-700">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Pending</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-3xl font-black font-display text-[#f97316]">{stats.sent}</span>
+            <Clock size={16} className="text-[#f97316]" />
           </div>
         </div>
 
-        <div className="glass p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Signed</span>
-          <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-bold font-display text-emerald-400">{stats.signed}</span>
+        <div className="cyber-card p-5 rounded-lg flex flex-col justify-between hover:border-[#10b981]/50">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Signed</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-3xl font-black font-display text-emerald-400">{stats.signed}</span>
             <CheckCircle size={16} className="text-emerald-400" />
           </div>
         </div>
 
-        <div className="glass p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Declined</span>
-          <div className="flex items-baseline space-x-2 mt-2">
-            <span className="text-3xl font-bold font-display text-rose-400">{stats.declined}</span>
+        <div className="cyber-card p-5 rounded-lg flex flex-col justify-between hover:border-rose-500/50">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Declined</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-3xl font-black font-display text-rose-400">{stats.declined}</span>
             <XCircle size={16} className="text-rose-400" />
           </div>
         </div>
@@ -166,19 +166,19 @@ const Dashboard: React.FC<DashboardProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Document list */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="glass p-6 rounded-2xl border border-slate-800/80">
+          <div className="cyber-card p-6 rounded-xl">
             {/* Filter Bar */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 pb-6 border-b border-slate-800/80 mb-6 gap-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 pb-6 border-b border-[#1f1f2e] mb-6 gap-4">
               {/* Tab Selector */}
               <div className="flex flex-wrap gap-2">
                 {(['all', 'draft', 'sent', 'signed', 'declined'] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setStatusFilter(tab)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
                       statusFilter === tab
-                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/10'
-                        : 'text-slate-400 hover:text-white bg-slate-900/50 hover:bg-slate-800'
+                        ? 'bg-[#f97316] text-black border-[#ea580c] font-black'
+                        : 'text-slate-400 hover:text-white border-transparent hover:border-[#1f1f2e] bg-black'
                     }`}
                   >
                     {tab}
@@ -191,46 +191,49 @@ const Dashboard: React.FC<DashboardProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search documents or recipient..."
-                className="px-4 py-2 bg-slate-950/40 rounded-xl border border-slate-800 text-sm focus:outline-none focus:border-indigo-500 placeholder-slate-500 text-white w-full md:max-w-xs"
+                placeholder="Search ledger..."
+                className="px-4 py-2 cyber-input rounded-lg text-sm w-full md:max-w-xs"
               />
             </div>
 
             {/* List */}
             {loading ? (
-              <div className="text-center py-12 text-slate-500 text-sm animate-pulse">Loading documents...</div>
+              <div className="text-center py-12 text-slate-500 text-xs font-bold uppercase tracking-wider tech-font animate-pulse">Loading Document Ledger...</div>
             ) : filteredDocs.length === 0 ? (
               <div className="text-center py-16 text-slate-500">
-                <FileText size={48} className="mx-auto mb-4 text-slate-700" />
-                <p className="text-sm">No documents found matching the criteria.</p>
+                <FileText size={48} className="mx-auto mb-4 text-slate-800" />
+                <p className="text-xs uppercase font-bold tracking-wider">No matching records found.</p>
               </div>
             ) : (
-              <div className="divide-y divide-slate-800/60">
+              <div className="divide-y divide-[#1f1f2e]">
                 {filteredDocs.map((doc) => (
                   <div key={doc._id} className="py-4 first:pt-0 last:pb-0 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center space-x-3">
-                        <h4 className="font-semibold text-white text-base hover:text-indigo-400 cursor-pointer" onClick={() => setSelectedAuditDoc(doc)}>
+                        <h4 
+                          className="font-bold text-white text-base hover:text-[#f97316] cursor-pointer transition-colors"
+                          onClick={() => setSelectedAuditDoc(doc)}
+                        >
                           {doc.title}
                         </h4>
                         {getStatusBadge(doc.status)}
                       </div>
                       
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                         <span className="flex items-center space-x-1">
-                          <Calendar size={12} />
-                          <span>Uploaded: {new Date(doc.createdAt).toLocaleDateString()}</span>
+                          <Calendar size={10} />
+                          <span className="tech-font">{new Date(doc.createdAt).toLocaleDateString()}</span>
                         </span>
                         
                         {(doc.status !== 'draft') && (
                           <span className="flex items-center space-x-1">
-                            <Mail size={12} />
-                            <span>Recipient: {doc.recipientName} ({doc.recipientEmail})</span>
+                            <Mail size={10} />
+                            <span>{doc.recipientName} ({doc.recipientEmail})</span>
                           </span>
                         )}
 
                         {doc.status === 'declined' && doc.declineReason && (
-                          <span className="text-rose-400 font-medium">Reason: {doc.declineReason}</span>
+                          <span className="text-rose-400 font-bold tech-font">[REASON: {doc.declineReason}]</span>
                         )}
                       </div>
                     </div>
@@ -243,7 +246,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                             setSelectedDocId(doc._id);
                             setCurrentPage('builder');
                           }}
-                          className="px-3.5 py-2 bg-indigo-600/10 hover:bg-indigo-600 border border-indigo-500/20 hover:border-indigo-500 text-indigo-400 hover:text-white rounded-lg text-xs font-semibold transition-all cursor-pointer"
+                          className="px-3.5 py-2 cyber-button-secondary rounded-lg text-[10px] font-bold uppercase tracking-wider cursor-pointer"
                         >
                           Configure Layout
                         </button>
@@ -253,7 +256,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                         <>
                           <button
                             onClick={() => copySigningLink(doc.signingToken!)}
-                            className="p-2 bg-slate-900/50 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white rounded-lg transition-all cursor-pointer"
+                            className="p-2 bg-black hover:bg-[#f97316] hover:text-black border border-[#1f1f2e] hover:border-[#ea580c] text-slate-400 hover:scale-102 transition-all rounded-lg cursor-pointer"
                             title="Copy Signing URL"
                           >
                             <Copy size={14} />
@@ -263,7 +266,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                               setSelectedToken(doc.signingToken!);
                               setCurrentPage('sign-portal');
                             }}
-                            className="p-2 bg-slate-900/50 hover:bg-slate-800 border border-slate-800 text-indigo-400 hover:text-indigo-300 rounded-lg transition-all cursor-pointer"
+                            className="p-2 bg-black hover:bg-[#f97316] hover:text-black border border-[#1f1f2e] hover:border-[#ea580c] text-[#f97316] hover:scale-102 transition-all rounded-lg cursor-pointer"
                             title="Go to Sign Portal"
                           >
                             <ExternalLink size={14} />
@@ -275,7 +278,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                         <>
                           <a
                             href={`${API_BASE_URL}/docs/download/signed/${doc._id}`}
-                            className="p-2 bg-emerald-500/10 hover:bg-emerald-500 border border-emerald-500/20 hover:border-emerald-500 text-emerald-400 hover:text-white rounded-lg transition-all cursor-pointer flex items-center"
+                            className="p-2 bg-black hover:bg-emerald-500 hover:text-black border border-[#1f1f2e] hover:border-emerald-600 text-emerald-400 hover:scale-102 transition-all rounded-lg cursor-pointer flex items-center"
                             title="Download Signed PDF"
                           >
                             <Download size={14} />
@@ -285,8 +288,8 @@ const Dashboard: React.FC<DashboardProps> = ({
                               setSelectedDocId(doc._id);
                               setCurrentPage('verify');
                             }}
-                            className="p-2 bg-indigo-500/10 hover:bg-indigo-505 border border-indigo-500/20 hover:border-indigo-500 text-indigo-400 hover:text-white rounded-lg transition-all cursor-pointer"
-                            title="Verify Cryptographic Hash & Audit Trail"
+                            className="p-2 bg-black hover:bg-[#f97316] hover:text-black border border-[#1f1f2e] hover:border-[#ea580c] text-[#f97316] hover:scale-102 transition-all rounded-lg cursor-pointer"
+                            title="Verify Certificate"
                           >
                             <FileCheck size={14} />
                           </button>
@@ -295,9 +298,9 @@ const Dashboard: React.FC<DashboardProps> = ({
                       
                       <button
                         onClick={() => setSelectedAuditDoc(doc)}
-                        className="px-2.5 py-2 bg-slate-900/50 hover:bg-slate-800 border border-slate-800 text-xs text-slate-300 hover:text-white rounded-lg transition-all cursor-pointer"
+                        className="px-3 py-2 bg-black hover:bg-slate-900 border border-[#1f1f2e] text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-white rounded-lg transition-all cursor-pointer"
                       >
-                        Audit Trail
+                        Audit
                       </button>
                     </div>
 
@@ -311,40 +314,38 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Audit Trail Sidebar Panel */}
         <div className="lg:col-span-1">
-          <div className="glass p-6 rounded-2xl border border-slate-800/80 h-full flex flex-col justify-between min-h-[400px]">
+          <div className="cyber-card p-6 rounded-xl h-full flex flex-col justify-between min-h-[400px]">
             <div>
-              <div className="flex items-center space-x-2 pb-4 border-b border-slate-800 mb-6">
-                <ListOrdered size={18} className="text-indigo-400" />
-                <h3 className="font-display font-bold text-lg text-white">History & Auditing</h3>
+              <div className="flex items-center space-x-2 pb-4 border-b border-[#1f1f2e] mb-6">
+                <ListOrdered size={16} className="text-[#f97316]" />
+                <h3 className="font-display font-black text-lg text-white uppercase">History Ledger</h3>
               </div>
 
               {selectedAuditDoc ? (
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-semibold text-indigo-400 text-sm truncate">{selectedAuditDoc.title}</h4>
-                    <p className="text-[11px] text-slate-500 font-mono mt-1 truncate">ID: {selectedAuditDoc._id}</p>
+                    <h4 className="font-bold text-[#f97316] text-sm truncate uppercase">{selectedAuditDoc.title}</h4>
+                    <p className="text-[10px] text-slate-500 font-mono mt-1 truncate">ID: {selectedAuditDoc._id}</p>
                   </div>
                   
                   {/* Timeline */}
-                  <div className="relative border-l border-slate-800 ml-2.5 pl-5 space-y-5">
+                  <div className="relative border-l-2 border-[#1f1f2e] ml-2 pl-4 space-y-5">
                     {selectedAuditDoc.auditLog.map((log) => (
                       <div key={log._id} className="relative">
                         {/* Timeline dot */}
-                        <div className="absolute -left-[26px] top-1.5 w-3.5 h-3.5 rounded-full border border-slate-900 bg-indigo-500 flex items-center justify-center">
-                          <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                        </div>
+                        <div className="absolute -left-[24px] top-1.5 w-3 h-3 rounded-full border-2 border-black bg-[#f97316] flex items-center justify-center" />
                         
-                        <div>
+                        <div className="space-y-1">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300 tech-font">
                               {log.action}
                             </span>
-                            <span className="text-[10px] text-slate-500">
+                            <span className="text-[9px] text-slate-500 tech-font">
                               {new Date(log.timestamp).toLocaleTimeString()}
                             </span>
                           </div>
-                          <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">{log.details}</p>
-                          <p className="text-[10px] text-slate-500 font-mono mt-0.5">By: {log.actor}</p>
+                          <p className="text-[11px] text-slate-400 leading-relaxed font-medium">{log.details}</p>
+                          <p className="text-[9px] text-slate-500 tech-font uppercase">By: {log.actor}</p>
                         </div>
                       </div>
                     ))}
@@ -352,9 +353,9 @@ const Dashboard: React.FC<DashboardProps> = ({
                 </div>
               ) : (
                 <div className="text-center py-16 text-slate-600 flex flex-col items-center">
-                  <HelpCircle size={40} className="mb-2 text-slate-800" />
-                  <p className="text-xs leading-relaxed max-w-[200px] mx-auto">
-                    Select "Audit Trail" or click a document title to load its immutable history log.
+                  <HelpCircle size={40} className="mb-2 text-slate-900" />
+                  <p className="text-[10px] uppercase font-bold tracking-wider leading-relaxed max-w-[200px] mx-auto text-slate-500">
+                    Select "Audit" or click a document title to view the timeline.
                   </p>
                 </div>
               )}
@@ -363,7 +364,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             {selectedAuditDoc && (
               <button
                 onClick={() => setSelectedAuditDoc(null)}
-                className="w-full text-center py-2 bg-slate-900/60 hover:bg-slate-850 hover:text-white border border-slate-800 text-xs text-slate-400 rounded-xl transition-all mt-6 cursor-pointer"
+                className="w-full text-center py-2 bg-black hover:bg-slate-900 text-xs font-bold uppercase tracking-wider border border-[#1f1f2e] text-slate-500 hover:text-white rounded-lg transition-all mt-6 cursor-pointer"
               >
                 Clear History View
               </button>

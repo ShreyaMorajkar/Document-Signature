@@ -27,7 +27,7 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ isOpen, onClose, onSave }) 
     canvas.height = rect.height * 2;
     ctx.scale(2, 2);
 
-    ctx.strokeStyle = '#38bdf8'; // light blue sky color for signature
+    ctx.strokeStyle = '#3b82f6'; // Clean ink blue color
     ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -110,7 +110,6 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ isOpen, onClose, onSave }) 
       if (!canvas) return;
 
       // Check if canvas is empty before saving
-      // A quick check is testing if all pixel data is 0
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       
@@ -142,7 +141,7 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ isOpen, onClose, onSave }) 
       
       // Draw text
       ctx.font = '55px "Great Vibes", cursive';
-      ctx.fillStyle = '#0284c7'; // dark blue text signature
+      ctx.fillStyle = '#1e3a8a'; // Dark ink blue text signature for white PDF
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(typedName, tempCanvas.width / 2, tempCanvas.height / 2);
@@ -153,49 +152,49 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ isOpen, onClose, onSave }) 
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="glass w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 flex flex-col">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+      <div className="cyber-card w-full max-w-xl rounded-xl overflow-hidden flex flex-col">
         
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-          <h3 className="font-display text-lg font-bold text-white">Create Your Signature</h3>
+        <div className="px-6 py-4 border-b border-[#1f1f2e] flex items-center justify-between">
+          <h3 className="font-display text-lg font-black text-white uppercase">Create Your Signature</h3>
           <button 
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-all cursor-pointer"
+            className="text-slate-400 hover:text-white transition-all cursor-pointer font-bold"
           >
             ✕
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-slate-800/80">
+        <div className="flex border-b border-[#1f1f2e] bg-black/40">
           <button
             onClick={() => setActiveTab('draw')}
-            className={`flex-1 py-3 flex items-center justify-center space-x-2 text-sm font-medium transition-all cursor-pointer border-b-2 ${
+            className={`flex-1 py-3 flex items-center justify-center space-x-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border-b-2 ${
               activeTab === 'draw'
-                ? 'border-indigo-500 text-white bg-indigo-500/5'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-[#f97316] text-[#f97316] bg-[#f97316]/5'
+                : 'border-transparent text-slate-450 text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Edit3 size={16} />
+            <Edit3 size={14} />
             <span>Draw</span>
           </button>
           
           <button
             onClick={() => setActiveTab('type')}
-            className={`flex-1 py-3 flex items-center justify-center space-x-2 text-sm font-medium transition-all cursor-pointer border-b-2 ${
+            className={`flex-1 py-3 flex items-center justify-center space-x-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border-b-2 ${
               activeTab === 'type'
-                ? 'border-indigo-500 text-white bg-indigo-500/5'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-[#f97316] text-[#f97316] bg-[#f97316]/5'
+                : 'border-transparent text-slate-450 text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Type size={16} />
+            <Type size={14} />
             <span>Type</span>
           </button>
         </div>
 
         {/* Canvas / Input Body */}
-        <div className="p-6 bg-slate-950/40 min-h-[220px] flex items-center justify-center">
+        <div className="p-6 bg-[#050508]/40 min-h-[220px] flex items-center justify-center">
           {activeTab === 'draw' ? (
             <div className="relative w-full">
               <canvas
@@ -207,9 +206,9 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ isOpen, onClose, onSave }) 
                 onTouchStart={startDrawing}
                 onTouchMove={draw}
                 onTouchEnd={stopDrawing}
-                className="w-full h-[180px] bg-slate-900/60 rounded-xl border border-slate-800 cursor-crosshair shadow-inner"
+                className="w-full h-[180px] bg-black rounded-lg border border-[#1f1f2e] cursor-crosshair"
               />
-              <span className="absolute bottom-3 left-4 text-xs text-slate-500 pointer-events-none select-none">
+              <span className="absolute bottom-3 left-4 text-[10px] uppercase font-bold tracking-wider text-slate-650 text-slate-500 pointer-events-none select-none">
                 Draw here (touch/mouse)
               </span>
             </div>
@@ -221,17 +220,17 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ isOpen, onClose, onSave }) 
                 onChange={(e) => setTypedName(e.target.value)}
                 placeholder="Type your name..."
                 maxLength={25}
-                className="w-full px-4 py-3 bg-slate-900/60 rounded-xl border border-slate-800 text-white focus:outline-none focus:border-indigo-500 shadow-inner text-center text-lg tracking-wide"
+                className="w-full px-4 py-3 cyber-input rounded-lg text-center text-lg tracking-wide uppercase font-bold"
               />
               
               {/* Live Preview box */}
-              <div className="w-full h-[100px] bg-slate-900/40 rounded-xl border border-slate-800/50 flex items-center justify-center shadow-inner overflow-hidden">
+              <div className="w-full h-[100px] bg-black rounded-lg border border-[#1f1f2e] flex items-center justify-center overflow-hidden">
                 {typedName.trim() ? (
-                  <span className="font-script text-5xl text-sky-400 select-none animate-pulse">
+                  <span className="font-script text-5xl text-[#f97316] select-none animate-pulse">
                     {typedName}
                   </span>
                 ) : (
-                  <span className="text-xs text-slate-500">Signature preview will appear here</span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Signature preview will appear here</span>
                 )}
               </div>
             </div>
@@ -239,10 +238,10 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ isOpen, onClose, onSave }) 
         </div>
 
         {/* Footer actions */}
-        <div className="px-6 py-4 border-t border-slate-800 flex items-center justify-between bg-slate-950/20">
+        <div className="px-6 py-4 border-t border-[#1f1f2e] flex items-center justify-between bg-black/20">
           <button
             onClick={activeTab === 'draw' ? clearCanvas : () => setTypedName('')}
-            className="flex items-center space-x-2 text-xs text-slate-400 hover:text-slate-200 bg-slate-800/40 hover:bg-slate-800 px-3 py-2 rounded-lg border border-slate-800 transition-all cursor-pointer"
+            className="flex items-center space-x-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-200 bg-black hover:bg-slate-905 px-3 py-2 rounded-lg border border-[#1f1f2e] transition-all cursor-pointer"
           >
             <RefreshCw size={12} />
             <span>Reset</span>
@@ -251,15 +250,15 @@ const SignaturePad: React.FC<SignaturePadProps> = ({ isOpen, onClose, onSave }) 
           <div className="flex space-x-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800/50 hover:text-white rounded-lg text-sm cursor-pointer transition-all"
+              className="px-4 py-2 bg-black text-slate-300 border border-[#1f1f2e] hover:bg-slate-900 hover:text-white rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer transition-all"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="flex items-center space-x-2 px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all cursor-pointer"
+              className="flex items-center space-x-2 px-5 py-2 cyber-button-primary rounded-lg text-xs"
             >
-              <Check size={16} />
+              <Check size={14} />
               <span>Use Signature</span>
             </button>
           </div>

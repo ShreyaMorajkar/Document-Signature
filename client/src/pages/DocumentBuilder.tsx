@@ -258,15 +258,15 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
             setSelectedDocId(null);
             setCurrentPage('dashboard');
           }}
-          className="p-2 bg-slate-900/50 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white rounded-lg transition-all cursor-pointer"
+          className="p-2 bg-black hover:bg-slate-900 border border-[#1f1f2e] text-slate-400 hover:text-white rounded-lg transition-all cursor-pointer"
         >
           <ArrowLeft size={16} />
         </button>
         <div>
-          <h1 className="font-display text-2xl font-bold text-white mt-0 mb-1">
-            {activeStep === 1 ? 'Upload Document' : 'Place Signature Fields'}
+          <h1 className="font-display text-2xl font-black text-white uppercase mt-0 mb-1">
+            {activeStep === 1 ? 'Upload Document' : 'Signature Field Placement'}
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
             {activeStep === 1 
               ? 'Upload a PDF to configure signature placement layout.' 
               : 'Add signature blocks and place them anywhere on the document pages.'
@@ -278,21 +278,21 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
       {/* Step 1: Upload */}
       {activeStep === 1 && (
         <div className="flex justify-center py-6">
-          <div className="glass w-full max-w-xl p-8 rounded-2xl border border-slate-800 glow-indigo">
+          <div className="cyber-card w-full max-w-xl p-8 rounded-xl">
             <form onSubmit={handleUpload} className="space-y-6">
               <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Document Title</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">Document Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Consulting Agreement (Optional)"
-                  className="w-full px-4 py-3 bg-slate-950/40 rounded-xl border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all text-sm shadow-inner"
+                  className="w-full px-4 py-3 cyber-input rounded-lg text-sm"
                 />
               </div>
 
               {/* Upload Drag Box */}
-              <div className="relative border-2 border-dashed border-slate-800 hover:border-indigo-500/50 rounded-2xl bg-slate-950/20 p-8 text-center transition-all">
+              <div className="relative border-2 border-dashed border-[#1f1f2e] hover:border-[#f97316] rounded-lg bg-black/40 p-8 text-center transition-all">
                 <input
                   type="file"
                   accept="application/pdf"
@@ -306,18 +306,18 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
                 <div className="flex flex-col items-center space-y-3">
-                  <div className="p-4 bg-indigo-500/10 rounded-full text-indigo-400">
+                  <div className="p-4 bg-[#f97316]/10 rounded-lg text-[#f97316] border border-[#ea580c]/25">
                     <UploadCloud size={32} />
                   </div>
                   {file ? (
                     <div>
-                      <p className="text-sm font-semibold text-white">{file.name}</p>
-                      <p className="text-xs text-indigo-400 mt-1">{(file.size / (1024 * 1024)).toFixed(2)} MB • Click to replace</p>
+                      <p className="text-sm font-bold text-white">{file.name}</p>
+                      <p className="text-xs text-[#f97316] font-bold mt-1 tech-font">{(file.size / (1024 * 1024)).toFixed(2)} MB • Click to replace</p>
                     </div>
                   ) : (
                     <div>
-                      <p className="text-sm font-semibold text-white">Choose a PDF file</p>
-                      <p className="text-xs text-slate-500 mt-1">Drag and drop or click to browse</p>
+                      <p className="text-sm font-bold text-white uppercase tracking-wider">Choose a PDF file</p>
+                      <p className="text-xs text-slate-500 mt-1 uppercase font-bold">Drag and drop or click to browse</p>
                     </div>
                   )}
                 </div>
@@ -326,7 +326,7 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
               <button
                 type="submit"
                 disabled={loading || !file}
-                className="w-full flex items-center justify-center space-x-2 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-700/50 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all cursor-pointer"
+                className="w-full flex items-center justify-center py-3.5 cyber-button-primary rounded-lg text-sm"
               >
                 <span>{loading ? 'Uploading PDF...' : 'Proceed to Place Signatures'}</span>
               </button>
@@ -342,13 +342,13 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
           {/* Main PDF Rendering Workspace */}
           <div className="lg:col-span-3 space-y-8 flex flex-col items-center overflow-x-auto py-2">
             {loading && (
-              <div className="text-slate-400 py-12 animate-pulse text-sm">Rendering PDF document pages...</div>
+              <div className="text-slate-400 py-12 animate-pulse text-xs font-bold uppercase tracking-wider tech-font">Rendering PDF document pages...</div>
             )}
             
             {Array.from({ length: numPages }).map((_, idx) => (
               <div 
                 key={idx}
-                className="relative bg-slate-900 rounded-xl shadow-2xl border border-slate-800/80 select-none"
+                className="relative bg-slate-950 rounded-lg shadow-2xl border-2 border-[#1f1f2e] select-none"
                 style={{ 
                   width: pagesDim[idx]?.width || 'auto',
                   height: pagesDim[idx]?.height || 'auto'
@@ -359,7 +359,7 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
                 {/* PDF Page Canvas */}
                 <canvas
                   ref={(el) => { canvasRefs.current[idx] = el; }}
-                  className="rounded-xl"
+                  className="rounded-lg"
                 />
 
                 {/* Relative Coordinate Overlay */}
@@ -371,7 +371,7 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
                   <div className="absolute top-4 left-4 z-10">
                     <button
                       onClick={() => addSignatureField(idx)}
-                      className="flex items-center space-x-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-md transition-all cursor-pointer pointer-events-auto"
+                      className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#f97316] hover:bg-[#ea580c] text-black text-xs font-bold uppercase tracking-wider rounded border border-[#ea580c] transition-all cursor-pointer pointer-events-auto"
                     >
                       <Sparkles size={12} />
                       <span>+ Place Signature Box Here</span>
@@ -402,30 +402,30 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
                             width: `${w}px`,
                             height: `${h}px`,
                           }}
-                          className={`absolute flex flex-col justify-between p-2 rounded-lg border-2 select-none drag-element pointer-events-auto transition-all ${
+                          className={`absolute flex flex-col justify-between p-2 rounded border-2 select-none drag-element pointer-events-auto transition-all ${
                             isDragging 
-                              ? 'border-indigo-400 bg-indigo-500/25 cursor-grabbing scale-102 shadow-lg z-50' 
-                              : 'border-dashed border-indigo-500/70 bg-indigo-500/10 cursor-grab hover:bg-indigo-500/20'
+                              ? 'border-[#f97316] bg-[#f97316]/30 cursor-grabbing scale-102 shadow-lg z-50' 
+                              : 'border-dashed border-[#f97316] bg-[#f97316]/10 cursor-grab hover:bg-[#f97316]/25'
                           }`}
                         >
                           <div 
-                            className="flex items-center justify-between text-[10px] text-indigo-300 font-bold uppercase tracking-wider select-none"
+                            className="flex items-center justify-between text-[9px] text-[#f97316] font-bold uppercase tracking-wider select-none tech-font"
                             onMouseDown={(e) => handleDragStart(e, field.id, idx)}
                           >
                             <span className="flex items-center space-x-1">
-                              <Move size={10} />
+                              <Move size={9} />
                               <span>Signature</span>
                             </span>
                             <button
                               onClick={() => deleteField(field.id)}
-                              className="text-indigo-400 hover:text-rose-400 transition-all cursor-pointer pointer-events-auto"
+                              className="text-[#f97316] hover:text-white transition-all cursor-pointer pointer-events-auto"
                             >
-                              <Trash2 size={10} />
+                              <Trash2 size={9} />
                             </button>
                           </div>
                           
                           <div className="flex items-center justify-center flex-1">
-                            <span className="text-[11px] font-semibold text-indigo-300 select-none">Place Signature Box</span>
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#f97316] select-none">PLACE HERE</span>
                           </div>
                         </div>
                       );
@@ -433,7 +433,7 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
                 </div>
 
                 {/* Page Counter tag */}
-                <div className="absolute bottom-4 right-4 bg-slate-950/80 px-2 py-1 rounded text-[10px] text-slate-400 font-mono">
+                <div className="absolute bottom-4 right-4 bg-black border border-[#1f1f2e] px-2 py-1 rounded text-[10px] text-slate-400 font-mono">
                   Page {idx + 1} of {numPages}
                 </div>
               </div>
@@ -442,34 +442,34 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
 
           {/* Configuration Sidebar */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="glass p-6 rounded-2xl border border-slate-800/80 sticky top-28 space-y-6">
+            <div className="cyber-card p-6 rounded-xl sticky top-28 space-y-6">
               
               {/* Box Placers info */}
-              <div className="pb-4 border-b border-slate-800">
-                <div className="flex items-center space-x-2 text-indigo-400 mb-2">
+              <div className="pb-4 border-b border-[#1f1f2e]">
+                <div className="flex items-center space-x-2 text-[#f97316] mb-2">
                   <FileSignature size={18} />
-                  <h3 className="font-display font-bold text-base text-white">Layout Config</h3>
+                  <h3 className="font-display font-black text-sm text-white uppercase">Layout Config</h3>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Click the "+ Place Signature Box" button on any page of the PDF above, then drag the box to the exact signature line.
+                <p className="text-xs text-slate-400 leading-relaxed uppercase font-semibold">
+                  Click the "+ Place Signature Box" button on any page of the PDF, then drag it to your signature line.
                 </p>
               </div>
 
               {/* Placed Fields Counter list */}
               <div>
-                <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Placed Fields ({fields.length})</span>
+                <span className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Placed Fields ({fields.length})</span>
                 {fields.length === 0 ? (
-                  <div className="text-center py-4 bg-slate-950/20 border border-dashed border-slate-850 rounded-xl text-slate-500 text-xs">
-                    No signature fields placed yet.
+                  <div className="text-center py-4 bg-black border border-dashed border-[#1f1f2e] rounded text-slate-500 text-xs uppercase font-bold">
+                    No fields placed.
                   </div>
                 ) : (
                   <div className="space-y-2 max-h-[160px] overflow-y-auto">
                     {fields.map((f, index) => (
-                      <div key={f.id} className="flex items-center justify-between p-2 bg-slate-950/40 rounded-lg border border-slate-850 text-xs">
-                        <span className="text-slate-300">Field #{index + 1} (Page {f.page + 1})</span>
+                      <div key={f.id} className="flex items-center justify-between p-2 bg-black rounded border border-[#1f1f2e] text-xs font-semibold uppercase tracking-wider text-slate-300">
+                        <span>Field #{index + 1} (Page {f.page + 1})</span>
                         <button
                           onClick={() => deleteField(f.id)}
-                          className="text-slate-500 hover:text-rose-400 transition-all cursor-pointer"
+                          className="text-[#f97316] hover:text-white transition-all cursor-pointer font-bold"
                         >
                           Delete
                         </button>
@@ -480,11 +480,11 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
               </div>
 
               {/* Recipient Details */}
-              <div className="space-y-4 pt-4 border-t border-slate-800">
-                <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400">Recipient Details</span>
+              <div className="space-y-4 pt-4 border-t border-[#1f1f2e]">
+                <span className="block text-xs font-bold uppercase tracking-wider text-slate-400">Recipient Details</span>
                 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Recipient Name</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Recipient Name</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                       <Users size={12} />
@@ -494,13 +494,13 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
                       value={recipientName}
                       onChange={(e) => setRecipientName(e.target.value)}
                       placeholder="Jane Smith"
-                      className="w-full pl-8 pr-3 py-2 bg-slate-950/40 rounded-xl border border-slate-850 text-xs focus:outline-none focus:border-indigo-500 text-white"
+                      className="w-full pl-8 pr-3 py-2 cyber-input rounded-lg text-xs"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Recipient Email</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Recipient Email</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                       <Mail size={12} />
@@ -510,7 +510,7 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
                       value={recipientEmail}
                       onChange={(e) => setRecipientEmail(e.target.value)}
                       placeholder="jane@company.com"
-                      className="w-full pl-8 pr-3 py-2 bg-slate-950/40 rounded-xl border border-slate-850 text-xs focus:outline-none focus:border-indigo-500 text-white"
+                      className="w-full pl-8 pr-3 py-2 cyber-input rounded-lg text-xs"
                     />
                   </div>
                 </div>
@@ -520,7 +520,7 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
               <button
                 onClick={handleSend}
                 disabled={loading || fields.length === 0 || !recipientName || !recipientEmail}
-                className="w-full flex items-center justify-center space-x-2 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-700/50 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all cursor-pointer"
+                className="w-full flex items-center justify-center space-x-2 py-3.5 cyber-button-primary rounded-lg text-sm"
               >
                 <Send size={14} />
                 <span>Finalize & Send</span>

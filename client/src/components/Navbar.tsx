@@ -18,44 +18,44 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage }) => {
   };
 
   return (
-    <nav className="glass sticky top-0 z-50 px-6 py-4 flex items-center justify-between shadow-lg mb-8">
+    <nav className="w-full bg-[#050508]/80 border-b-2 border-[#1f1f2e] sticky top-0 z-50 px-6 py-4 flex items-center justify-between backdrop-blur-md mb-8">
       {/* Brand logo */}
       <div 
         className="flex items-center space-x-3 cursor-pointer select-none"
         onClick={() => setCurrentPage(token ? 'dashboard' : 'login')}
       >
-        <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-md shadow-indigo-500/20">
-          <FileSignature size={24} />
+        <div className="bg-[#f97316] p-2 rounded-lg text-black border border-[#ea580c] shadow-sm">
+          <FileSignature size={20} />
         </div>
-        <span className="font-display text-xl font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-          SignFlow
+        <span className="font-display text-xl font-black tracking-tight text-white uppercase">
+          Sign<span className="text-[#f97316]">Flow</span>
         </span>
       </div>
 
       {/* Navigation items */}
       {token && (
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-4">
           <button
             onClick={() => setCurrentPage('dashboard')}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
               currentPage === 'dashboard'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                ? 'bg-[#f97316] text-black border border-[#ea580c] font-black'
+                : 'text-slate-400 hover:text-white border border-transparent hover:border-[#1f1f2e] hover:bg-slate-900/50'
             }`}
           >
-            <LayoutDashboard size={16} />
+            <LayoutDashboard size={14} />
             <span>Dashboard</span>
           </button>
           
           <button
             onClick={() => setCurrentPage('builder')}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
               currentPage === 'builder'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                ? 'bg-[#f97316] text-black border border-[#ea580c] font-black'
+                : 'text-slate-400 hover:text-white border border-transparent hover:border-[#1f1f2e] hover:bg-slate-900/50'
             }`}
           >
-            <UploadCloud size={16} />
+            <UploadCloud size={14} />
             <span>Upload & Place</span>
           </button>
         </div>
@@ -66,24 +66,24 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage }) => {
         {token ? (
           <div className="flex items-center space-x-4">
             <div className="text-right hidden sm:block">
-              <p className="text-xs text-slate-400">Signed in as</p>
-              <p className="text-sm font-medium text-indigo-400">{user?.name || 'User'}</p>
+              <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Signed in as</p>
+              <p className="text-xs font-bold text-[#f97316] tech-font">{user?.name || 'User'}</p>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-2 text-slate-400 hover:text-rose-400 bg-slate-900/40 hover:bg-rose-950/20 p-2 rounded-lg border border-slate-800 hover:border-rose-900/50 transition-all cursor-pointer"
+              className="flex items-center space-x-2 text-slate-400 hover:text-black bg-black hover:bg-[#f97316] p-2 rounded-lg border border-[#1f1f2e] hover:border-[#ea580c] transition-all cursor-pointer text-xs uppercase font-bold tracking-wider"
               title="Sign Out"
             >
-              <LogOut size={16} />
-              <span className="hidden sm:inline text-sm">Sign Out</span>
+              <LogOut size={14} />
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         ) : (
           <button
             onClick={() => setCurrentPage('login')}
-            className="flex items-center space-x-2 text-indigo-400 hover:text-white bg-indigo-950/20 hover:bg-indigo-600 px-4 py-2 rounded-lg border border-indigo-900/50 hover:border-indigo-500 transition-all cursor-pointer text-sm font-medium"
+            className="flex items-center space-x-2 text-[#f97316] hover:text-black bg-black hover:bg-[#f97316] px-4 py-2 rounded-lg border border-[#1f1f2e] hover:border-[#ea580c] transition-all cursor-pointer text-xs font-bold uppercase tracking-wider"
           >
-            <ShieldCheck size={16} />
+            <ShieldCheck size={14} />
             <span>Sign In</span>
           </button>
         )}
