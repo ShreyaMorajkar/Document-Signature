@@ -106,7 +106,7 @@ const DocumentBuilder: React.FC<DocumentBuilderProps> = ({
       // We must render pages sequentially
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 1.2 }); // Display scale
+        const viewport = page.getViewport({ scale: 1.2, rotation: page.rotate }); // Display scale
         dims.push({ width: viewport.width, height: viewport.height });
         
         // Wait briefly for canvas elements to mount if needed

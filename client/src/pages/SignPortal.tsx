@@ -86,7 +86,7 @@ const SignPortal: React.FC<SignPortalProps> = ({ token, setCurrentPage }) => {
       const dims: PageDimensions[] = [];
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 1.2 });
+        const viewport = page.getViewport({ scale: 1.2, rotation: page.rotate });
         dims.push({ width: viewport.width, height: viewport.height });
 
         setTimeout(async () => {
