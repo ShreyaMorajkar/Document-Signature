@@ -5,8 +5,63 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, degrees } from 'pdf-lib';
 import auth from '../middleware/auth.js';
+
+// Helper to translate relative visual coordinates into rotated physical PDF coordinates
+function getRotatedDrawOptions(page, field) {
+  const { width: pageWidth, height: pageHeight } = page.getSize();
+  const rotationAngle = (page.getRotation().angle || 0) % 360;
+
+  let vPageW = pageWidth;
+  let vPageH = pageHeight;
+  if (rotationAngle === 90 || rotationAngle === 270) {
+    vPageW = pageHeight;
+    vPageH = pageWidth;
+  }
+
+  const vLeft = field.x * vPageW;
+  const vTop = field.y * vPageH;
+  const vWidth = field.width * vPageW;
+  const vHeight = field.height * vPageH;
+
+  let pdfX, pdfY, pdfW, pdfH, imageRotate;
+
+  if (rotationAngle === 90) {
+    pdfX = vTop;
+    pdfY = vLeft + vWidth;
+    pdfW = vHeight;
+    pdfH = vWidth;
+    imageRotate = degrees(270);
+  } else if (rotationAngle === 180) {
+    pdfX = pageWidth - vLeft;
+    pdfY = pageHeight - vTop;
+    pdfW = vWidth;
+    pdfH = vHeight;
+    imageRotate = degrees(180);
+  } else if (rotationAngle === 270) {
+    pdfX = pageWidth - vTop;
+    pdfY = pageHeight - vLeft - vWidth;
+    pdfW = vHeight;
+    pdfH = vWidth;
+    imageRotate = degrees(90);
+  } else {
+    // 0 degrees
+    pdfX = vLeft;
+    pdfY = vPageH - vTop - vHeight;
+    pdfW = vWidth;
+    pdfH = vHeight;
+    imageRotate = degrees(0);
+  }
+
+  return {
+    x: pdfX,
+    y: pdfY,
+    width: pdfW,
+    height: pdfH,
+    rotate: imageRotate
+  };
+}
 import Document from '../models/Document.js';
 import Signature from '../models/Signature.js';
 import { saveFile, getFileStream, getFileBytes } from '../utils/storage.js';
@@ -251,21 +306,10 @@ router.post('/sign/:token', async (req, res) => {
       const page = pages[pageIndex];
       if (!page) continue;
 
-      const { width: pageWidth, height: pageHeight } = page.getSize();
+      const drawOptions = getRotatedDrawOptions(page, field);
 
-      // Convert relative coordinate percentages to pdf-lib (bottom-left origin)
-      const absX = field.x * pageWidth;
-      const absY = (1 - field.y - field.height) * pageHeight;
-      const absW = field.width * pageWidth;
-      const absH = field.height * pageHeight;
-
-      // Draw the PNG onto the page
-      page.drawImage(signatureImage, {
-        x: absX,
-        y: absY,
-        width: absW,
-        height: absH,
-      });
+      // Draw the PNG onto the page with rotation adjustments
+      page.drawImage(signatureImage, drawOptions);
 
       // Update individual field
       field.status = 'signed';
